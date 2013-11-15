@@ -17,7 +17,7 @@ return array(
 		|
 		*/
 
-		'cas_hostname' => 'cas.uvsq.fr',
+		'cas_hostname' => 'cas.domain.fr',
 
 		/*
 		|--------------------------------------------------------------------------
@@ -72,6 +72,6 @@ return array(
 		'cas_validation' => '',
 		'cas_cert' => '/path/to/cert/file',
 		'cas_login_url' => '',
-		'cas_logout_url' => 'https://cas-dev.uvsq.fr/logout?service=https://l4.dev.dsi.uvsq.fr',
+		'cas_logout_url' => 'https://cas.domain.fr/logout?service=%s',
 	)
 );
