@@ -71,7 +71,7 @@ class Sso {
 
             // include phpCAS
             require_once('CAS.php');
-
+						//\phpCAS::setDebug();
             // initialize CAS client
             if ($cfg['cas_proxy']) {
                 \phpCAS::proxy(CAS_VERSION_2_0, $cfg['cas_hostname'], $cfg['cas_port'], $cfg['cas_uri'], false);
@@ -101,7 +101,7 @@ class Sso {
             }
 
 						if (!empty($cfg['cas_service'])) {
-							phpCAS::allowProxyChain(new CAS_ProxyChain(array($cfg['cas_service'])));
+							\phpCAS::allowProxyChain(new \CAS_ProxyChain_Any);
 						}
 
             // set login and logout URLs of the CAS server
