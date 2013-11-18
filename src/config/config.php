@@ -34,6 +34,22 @@ return array(
 
 		/*
 		|--------------------------------------------------------------------------
+		| Enable service to be proxied
+		|--------------------------------------------------------------------------
+		|
+		| Example:
+		| phpCAS::allowProxyChain(new CAS_ProxyChain(array(
+		|                                 '/^https:\/\/app[0-9]\.example\.com\/rest\//',
+		|                                 'http://client.example.com/'
+		|                         )));
+		| For the exemple above:
+		|	'cas_service' => array('/^https:\/\/app[0-9]\.example\.com\/rest\//','http://client.example.com/'),
+		*/
+
+		'cas_service' => array(),
+
+		/*
+		|--------------------------------------------------------------------------
 		| Authentication Password
 		|--------------------------------------------------------------------------
 		|

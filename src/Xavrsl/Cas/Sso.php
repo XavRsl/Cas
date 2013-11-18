@@ -100,6 +100,10 @@ class Sso {
                 \phpCAS::setNoCasServerValidation();
             }
 
+						if (!empty(($cfg['cas_service'])) {
+							phpCAS::allowProxyChain(new CAS_ProxyChain(array($cfg['cas_service'])));
+						}
+
             // set login and logout URLs of the CAS server
             \phpCAS::setServerLoginURL($cfg['cas_login_url']);
             \phpCAS::setServerLogoutURL($cfg['cas_logout_url']);
