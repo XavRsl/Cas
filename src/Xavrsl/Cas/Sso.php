@@ -100,7 +100,7 @@ class Sso {
                 \phpCAS::setNoCasServerValidation();
             }
 
-						if (!empty(($cfg['cas_service'])) {
+						if (!empty($cfg['cas_service'])) {
 							phpCAS::allowProxyChain(new CAS_ProxyChain(array($cfg['cas_service'])));
 						}
 
