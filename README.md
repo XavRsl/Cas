@@ -30,3 +30,27 @@ Usage
 ==
 
 Authenticate against the CAS server
+
+	Cas::authenticate();
+
+Exemple of Cas authentication in a route filter :
+
+```php
+Route::group(array('https', 'before' => 'cas'), function()
+{
+  Route::controller('toolbar', 'ToolbarController');
+
+  Route::controller('bibsearch', 'BibsearchController');
+});
+
+Route::controller('bibimages', 'BibimagesController');
+
+Route::filter('cas', function()
+{
+  Cas::authenticate();
+});
+```
+
+Then get the current user id this way :
+
+	Cas::getCurrentUser();
