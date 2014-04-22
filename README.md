@@ -5,13 +5,13 @@ CAS server SSO authentication in laravel 4.x
 
 ## Installation
 
-Require this package in your composer.json and run composer update (or run `composer require XavRsl/Cas:dev-master` directly):
+Require this package in your composer.json and run composer update (or run `composer require xavrsl/cas:dev-master` directly):
 
-    "XavRsl/Cas": "dev-master"
+    "xavrsl/cas": "dev-master"
 
 After updating composer, add the ServiceProvider to the providers array in app/config/app.php
 
-    'XavRsl/Cas/CasServiceProvider',
+    'Xavrsl/Cas/CasServiceProvider',
 
 As well as the Facade :
 
