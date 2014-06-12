@@ -11,7 +11,7 @@ Require this package in your composer.json and run composer update (or run `comp
 
 After updating composer, add the ServiceProvider to the providers array in app/config/app.php
 
-    'Xavrsl/Cas/CasServiceProvider',
+    'Xavrsl\Cas\CasServiceProvider',
 
 As well as the Facade :
 
