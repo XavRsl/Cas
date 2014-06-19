@@ -125,5 +125,10 @@ class Sso {
 
     }
 
+    public function logout() {
+        $this->cas_init();
+        \phpCAS::logout();
+    }
+
 }
 
