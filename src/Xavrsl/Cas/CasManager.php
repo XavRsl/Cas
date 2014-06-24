@@ -1,17 +1,41 @@
 <?php namespace Xavrsl\Cas;
 
+use Illuminate\Auth\AuthManager;
+use Illuminate\Session\SessionManager;
 use Illuminate\Support\Manager;
 
 class CasManager {
 
-	/**
+    var $config;
+
+    /**
 	 * The active connection instances.
 	 *
 	 * @var array
 	 */
 	protected $connections = array();
+    /**
+     * @var \Illuminate\Auth\AuthManager
+     */
+    private $auth;
+    /**
+     * @var \Illuminate\Session\SessionManager
+     */
+    private $session;
 
-	/**
+    /**
+     * @param array $config
+     * @param AuthManager $auth
+     * @param SessionManager $session
+     */
+    function __construct(Array $config, AuthManager $auth, SessionManager $session)
+    {
+        $this->config = $config;
+        $this->auth = $auth;
+        $this->session = $session;
+    }
+
+    /**
 	 * Get a Cas connection instance.
 	 *
 	 * @param  string  $name
@@ -37,9 +61,7 @@ class CasManager {
 	{
 		$config = $this->getConfig($name);
 
-		$connection = new Sso($config);
-
-		// $connection->authenticate();
+		$connection = new Sso($config, $this->auth, $this->session);
 
 		return $connection;
 	}
@@ -57,8 +79,7 @@ class CasManager {
 		// To get the database connection configuration, we will just pull each of the
 		// connection configurations and get the configurations for the given name.
 		// If the configuration doesn't exist, we'll throw an exception and bail.
-		// $connections = $this->app['config']['database.ldap'];
-		$connections = \Config::get('cas::config');
+		$connections = $this->config;
 
 		if (is_null($config = array_get($connections, $name)))
 		{

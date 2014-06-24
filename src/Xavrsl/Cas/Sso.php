@@ -1,4 +1,6 @@
 <?php namespace Xavrsl\Cas;
+use Illuminate\Auth\AuthManager;
+use Illuminate\Session\SessionManager;
 use phpCAS;
 use Illuminate\Auth\AuthManager as Auth;
 use Illuminate\Session\SessionManager as Session;
@@ -45,7 +47,7 @@ class Sso {
      * @param Auth $auth
      * @param Session $session
      */
-    public function __construct($config, Auth $auth, Session $session)
+    public function __construct($config, AuthManager $auth, SessionManager $session)
     {
         $this->config = $config;
         $this->auth = $auth;
@@ -99,6 +101,8 @@ class Sso {
             }
             else {
                 phpCAS::client(CAS_VERSION_2_0, $cfg['cas_hostname'], $cfg['cas_port'], $cfg['cas_uri'], false);
+
+                phpCAS::setServerLoginURL('http://bandolim.cri.uvsq.fr:8000');
             }
 
             // set service URL for authorization with CAS server
@@ -162,4 +166,3 @@ class Sso {
         }
     }
 }
-
