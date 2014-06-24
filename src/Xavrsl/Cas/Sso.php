@@ -1,5 +1,8 @@
 <?php namespace Xavrsl\Cas;
+
 use phpCAS;
+use Illuminate\Auth\Guard as LaravelAuth;
+use Illuminate\Session\Store as LaravelSession;
 
 /**
  * CAS authenticator
@@ -30,9 +33,21 @@ class Sso {
      */
     protected $cas_inited;
 
-    public function __construct($config)
+    /**
+     * @var \Illuminate\Auth\Guard
+     */
+    private $auth;
+
+    /**
+     * @var \Illuminate\Session\Store
+     */
+    private $session;
+
+    public function __construct($config, LaravelAuth $auth, LaravelSession $session)
     {
         $this->config = $config;
+        $this->auth = $auth;
+        $this->session = $session;
     }
 
     /**
@@ -132,5 +147,19 @@ class Sso {
         return $this->getCurrentUser();
     }
 
-}
+    public function logout()
+    {
+        if(phpCAS::isSessionAuthenticated()) {
+            if ($this->auth->check())
+            {
+                // Logout of laravel
+                $this->auth->logout();
+            }
+            // Logout of CAS
+            $this->session->flush();
+            phpCAS::logout();
+            exit;
+        }
+    }
 
+}
