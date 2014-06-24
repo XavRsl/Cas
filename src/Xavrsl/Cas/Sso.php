@@ -1,9 +1,13 @@
 <?php namespace Xavrsl\Cas;
 
+use phpCAS;
+use Illuminate\Auth\Guard as LaravelAuth;
+use Illuminate\Session\Store as LaravelSession;
+
 /**
  * CAS authenticator
  *
- * @package Xavrsm
+ * @package Xavrsl
  * @author Xavier Roussel  
  */
 class Sso {
@@ -29,9 +33,21 @@ class Sso {
      */
     protected $cas_inited;
 
-    public function __construct($config)
+    /**
+     * @var \Illuminate\Auth\Guard
+     */
+    private $auth;
+
+    /**
+     * @var \Illuminate\Session\Store
+     */
+    private $session;
+
+    public function __construct($config, LaravelAuth $auth, LaravelSession $session)
     {
         $this->config = $config;
+        $this->auth = $auth;
+        $this->session = $session;
     }
 
     /**
@@ -47,9 +63,9 @@ class Sso {
         $this->cas_init();
 
         // attempt to authenticate with CAS server
-        if (\phpCAS::forceAuthentication()) {
+        if (phpCAS::forceAuthentication()) {
             // retrieve authenticated credentials
-            $remoteUser = \phpCAS::getUser();
+            $remoteUser = phpCAS::getUser();
 
             $this->remoteUser = $remoteUser;
             return true;
@@ -69,21 +85,18 @@ class Sso {
             // retrieve configurations
             $cfg = $this->config;
 
-            // include phpCAS
-            require_once('CAS.php');
-						//\phpCAS::setDebug();
             // initialize CAS client
             if ($cfg['cas_proxy']) {
-                \phpCAS::proxy(CAS_VERSION_2_0, $cfg['cas_hostname'], $cfg['cas_port'], $cfg['cas_uri'], false);
+                phpCAS::proxy(CAS_VERSION_2_0, $cfg['cas_hostname'], $cfg['cas_port'], $cfg['cas_uri'], false);
 
                 // set URL for PGT callback
-                \phpCAS::setFixedCallbackURL($this->generate_url(array('action' => 'pgtcallback')));
+                phpCAS::setFixedCallbackURL($this->generate_url(array('action' => 'pgtcallback')));
      
                 // set PGT storage
-                \phpCAS::setPGTStorageFile('xml', $cfg['cas_pgt_dir']);
+                phpCAS::setPGTStorageFile('xml', $cfg['cas_pgt_dir']);
             }
             else {
-                \phpCAS::client(CAS_VERSION_2_0, $cfg['cas_hostname'], $cfg['cas_port'], $cfg['cas_uri'], false);
+                phpCAS::client(CAS_VERSION_2_0, $cfg['cas_hostname'], $cfg['cas_port'], $cfg['cas_uri'], false);
             }
 
             // set service URL for authorization with CAS server
@@ -91,22 +104,22 @@ class Sso {
 
             // set SSL validation for the CAS server
             if ($cfg['cas_validation'] == 'self') {
-                \phpCAS::setCasServerCert($cfg['cas_cert']);
+                phpCAS::setCasServerCert($cfg['cas_cert']);
             }
             else if ($cfg['cas_validation'] == 'ca') {
-                \phpCAS::setCasServerCACert($cfg['cas_cert']);
+                phpCAS::setCasServerCACert($cfg['cas_cert']);
             }
             else {
-                \phpCAS::setNoCasServerValidation();
+                phpCAS::setNoCasServerValidation();
             }
 
-						if (!empty($cfg['cas_service'])) {
-							\phpCAS::allowProxyChain(new \CAS_ProxyChain_Any);
-						}
+            if (!empty($cfg['cas_service'])) {
+                phpCAS::allowProxyChain(new \CAS_ProxyChain_Any);
+            }
 
             // set login and logout URLs of the CAS server
-            \phpCAS::setServerLoginURL($cfg['cas_login_url']);
-            \phpCAS::setServerLogoutURL($cfg['cas_logout_url']);
+            phpCAS::setServerLoginURL($cfg['cas_login_url']);
+            phpCAS::setServerLogoutURL($cfg['cas_logout_url']);
 
             $this->cas_inited = true;
         }
@@ -126,12 +139,27 @@ class Sso {
     }
 
     /**
-     * Logout of CAS
+     * getCurrentUser Alias
+     *
+     * @return array|null
      */
-    public function logout() {
-        $this->cas_init();
-        \phpCAS::logout();
+    public function user(){
+        return $this->getCurrentUser();
+    }
+
+    public function logout()
+    {
+        if(phpCAS::isSessionAuthenticated()) {
+            if ($this->auth->check())
+            {
+                // Logout of laravel
+                $this->auth->logout();
+            }
+            // Logout of CAS
+            $this->session->flush();
+            phpCAS::logout();
+            exit;
+        }
     }
 
 }
-
