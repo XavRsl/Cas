@@ -11,7 +11,8 @@
     ],
     "require": {
         "php": ">=5.3.0",
-        "illuminate/support": "4.x"
+        "illuminate/support": "4.x",
+        "jasig/phpcas": "dev-master"
     },
     "autoload": {
         "psr-0": {
