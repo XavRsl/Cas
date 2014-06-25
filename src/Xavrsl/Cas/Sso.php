@@ -7,7 +7,7 @@ use phpCAS;
  * CAS authenticator
  *
  * @package Xavrsl
- * @author Xavier Roussel  
+ * @author Xavier Roussel
  */
 class Sso {
 
@@ -93,18 +93,13 @@ class Sso {
 
                 // set URL for PGT callback
                 phpCAS::setFixedCallbackURL($this->generate_url(array('action' => 'pgtcallback')));
-     
+
                 // set PGT storage
                 phpCAS::setPGTStorageFile('xml', $cfg['cas_pgt_dir']);
             }
             else {
                 phpCAS::client(CAS_VERSION_2_0, $cfg['cas_hostname'], $cfg['cas_port'], $cfg['cas_uri'], false);
-
-                phpCAS::setServerLoginURL('http://bandolim.cri.uvsq.fr:8000');
             }
-
-            // set service URL for authorization with CAS server
-            //\phpCAS::setFixedServiceURL();
 
             // set SSL validation for the CAS server
             if ($cfg['cas_validation'] == 'self') {
@@ -127,7 +122,7 @@ class Sso {
 
             $this->cas_inited = true;
         }
-    }   
+    }
 
     /**
      * Returns information about the currently logged in user.
