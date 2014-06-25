@@ -2,8 +2,6 @@
 use Illuminate\Auth\AuthManager;
 use Illuminate\Session\SessionManager;
 use phpCAS;
-use Illuminate\Auth\AuthManager as Auth;
-use Illuminate\Session\SessionManager as Session;
 
 /**
  * CAS authenticator
