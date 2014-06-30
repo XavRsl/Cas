@@ -149,13 +149,6 @@ class Sso {
     }
 
     /**
-     * Set Remote User
-     */
-    private function setRemoteUser(){
-        $this->remoteUser = phpCAS::getUser();
-    }
-
-    /**
      * Configure CAS Proxy
      * @param $cfg
      */
@@ -190,5 +183,13 @@ class Sso {
         } else {
             phpCAS::setNoCasServerValidation();
         }
+    }
+
+
+    /**
+     * Set Remote User
+     */
+    private function setRemoteUser(){
+        $this->remoteUser = phpCAS::getUser();
     }
 }
