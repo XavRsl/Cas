@@ -34,6 +34,8 @@ class Sso {
      */
     private $session;
 
+    private $isAuthenticated;
+
     /**
      * @param $config
      * @param Auth $auth
@@ -71,7 +73,7 @@ class Sso {
      * @return bool
      */
     public function isAuthenticated(){
-        return phpCAS::isAuthenticated();
+        return $this->isAuthenticated;
     }
 
 
@@ -83,11 +85,6 @@ class Sso {
      * @return array|null
      */
     public function getCurrentUser() {
-
-        if( $this->isAuthenticated() ){
-            $this->setRemoteUser();
-        }
-
         return $this->remoteUser;
     }
 
@@ -131,6 +128,8 @@ class Sso {
         else
         {
             $this->configureCasClient();
+
+            $this->detect_authentication();
         }
 
         // set service URL for authorization with CAS server
@@ -146,6 +145,8 @@ class Sso {
         // set login and logout URLs of the CAS server
         phpCAS::setServerLoginURL($this->config['cas_login_url']);
         phpCAS::setServerLogoutURL($this->config['cas_logout_url']);
+
+
     }
 
     /**
@@ -191,5 +192,14 @@ class Sso {
      */
     private function setRemoteUser(){
         $this->remoteUser = phpCAS::getUser();
+    }
+
+    private function detect_authentication()
+    {
+        $this->isAuthenticated = phpCAS::isAuthenticated();
+
+        if ($this->isAuthenticated) {
+            $this->setRemoteUser();
+        }
     }
 }
