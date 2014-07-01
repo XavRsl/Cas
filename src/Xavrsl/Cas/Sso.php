@@ -1,8 +1,9 @@
 <?php namespace Xavrsl\Cas;
+
 use Illuminate\Auth\AuthManager;
 use Illuminate\Session\SessionManager;
 use phpCAS;
-
+require_once('CAS.php');
 /**
  * CAS authenticator
  *
@@ -17,13 +18,6 @@ class Sso {
      * @var array
      */
     protected $config;
-
-    /**
-     * Current CAS user
-     *
-     * @var string
-     */
-    protected $remoteUser;
 
     /**
      * @var \Illuminate\Auth\AuthManager
@@ -61,8 +55,6 @@ class Sso {
     {
         // attempt to authenticate with CAS server
         if (phpCAS::forceAuthentication()) {
-            // retrieve authenticated credentials
-            $this->setRemoteUser();
             return true;
         } else return false;
     }
@@ -85,7 +77,7 @@ class Sso {
      * @return array|null
      */
     public function getCurrentUser() {
-        return $this->remoteUser;
+        return phpCAS::getUser();
     }
 
     /**
@@ -120,23 +112,21 @@ class Sso {
      * @return none
      */
     private function cas_init() {
+
+
+
         // initialize CAS client
         if($this->config['cas_proxy'])
         {
             $this->configureCasProxy();
+            $this->configureSslValidation();
         }
         else
         {
             $this->configureCasClient();
-
+            $this->configureSslValidation();
             $this->detect_authentication();
         }
-
-        // set service URL for authorization with CAS server
-        //\phpCAS::setFixedServiceURL();
-
-        $this->configureSslValidation();
-
 
         if (!empty($this->config['cas_service'])) {
             phpCAS::allowProxyChain(new \CAS_ProxyChain_Any);
@@ -186,20 +176,8 @@ class Sso {
         }
     }
 
-
-    /**
-     * Set Remote User
-     */
-    private function setRemoteUser(){
-        $this->remoteUser = phpCAS::getUser();
-    }
-
     private function detect_authentication()
     {
         $this->isAuthenticated = phpCAS::isAuthenticated();
-
-        if ($this->isAuthenticated) {
-            $this->setRemoteUser();
-        }
     }
 }
