@@ -19,13 +19,6 @@ class Sso {
     protected $config;
 
     /**
-     * Current CAS user
-     *
-     * @var string
-     */
-    protected $remoteUser;
-
-    /**
      * @var \Illuminate\Auth\AuthManager
      */
     private $auth;
@@ -85,7 +78,7 @@ class Sso {
      * @return array|null
      */
     public function getCurrentUser() {
-        return $this->remoteUser;
+        return phpCAS::getUser();
     }
 
     /**
@@ -184,20 +177,8 @@ class Sso {
         }
     }
 
-
-    /**
-     * Set Remote User
-     */
-    private function setRemoteUser(){
-        $this->remoteUser = phpCAS::getUser();
-    }
-
     private function detect_authentication()
     {
         $this->isAuthenticated = phpCAS::isAuthenticated();
-
-        if ($this->isAuthenticated) {
-            $this->setRemoteUser();
-        }
     }
 }
