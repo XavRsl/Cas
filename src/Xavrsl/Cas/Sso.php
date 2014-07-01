@@ -1,8 +1,9 @@
 <?php namespace Xavrsl\Cas;
+
 use Illuminate\Auth\AuthManager;
 use Illuminate\Session\SessionManager;
 use phpCAS;
-
+require_once('CAS.php');
 /**
  * CAS authenticator
  *
