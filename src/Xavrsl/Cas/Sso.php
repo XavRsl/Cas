@@ -121,17 +121,18 @@ class Sso {
      */
     private function cas_init() {
 
-        $this->configureSslValidation();
+
 
         // initialize CAS client
         if($this->config['cas_proxy'])
         {
             $this->configureCasProxy();
+            $this->configureSslValidation();
         }
         else
         {
             $this->configureCasClient();
-
+            $this->configureSslValidation();
             $this->detect_authentication();
         }
 
