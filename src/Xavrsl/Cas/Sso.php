@@ -54,8 +54,6 @@ class Sso {
     {
         // attempt to authenticate with CAS server
         if (phpCAS::forceAuthentication()) {
-            // retrieve authenticated credentials
-            $this->setRemoteUser();
             return true;
         } else return false;
     }
