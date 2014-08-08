@@ -124,19 +124,17 @@ class Sso {
         if($this->config['cas_proxy'])
         {
             $this->configureCasProxy();
+            $this->configureSslValidation();
         }
         else
         {
             $this->configureCasClient();
-
+            $this->configureSslValidation();
             $this->detect_authentication();
         }
 
         // set service URL for authorization with CAS server
         //\phpCAS::setFixedServiceURL();
-
-        $this->configureSslValidation();
-
 
         if (!empty($this->config['cas_service'])) {
             phpCAS::allowProxyChain(new \CAS_ProxyChain_Any);
