@@ -65,7 +65,8 @@ return array(
 		| CAS Validation
 		|--------------------------------------------------------------------------
 		|
-		| Should CAS server be validated
+		| CAS server SSL validation: 'self' for self-signed certificate, 'ca' for
+		| certificate from a CA, empty for no SSL validation.
 		|
 		*/
 
