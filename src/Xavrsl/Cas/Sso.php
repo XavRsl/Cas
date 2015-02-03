@@ -98,7 +98,14 @@ class Sso {
     }
 
 
-    public function logout()
+    /**
+     * This method is used to logout from CAS
+     *
+     * @param string $service a URL that will be transmitted to the CAS server to do a redirect after logout
+     *
+     * @return none
+     */
+    public function logout($service = "")
     {
         if(phpCAS::isSessionAuthenticated()) {
             if ($this->auth->check())
@@ -106,7 +113,14 @@ class Sso {
                 $this->auth->logout();
             }
             $this->session->flush();
-            phpCAS::logout();
+			if($service != "")
+			{
+				phpCAS::logoutWithRedirectService($service);
+			}
+			else
+			{
+				phpCAS::logout();
+			}
             exit;
         }
     }
