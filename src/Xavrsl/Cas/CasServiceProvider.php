@@ -15,11 +15,6 @@ class CasServiceProvider extends ServiceProvider {
 	 */
 	protected $defer = false;
 
-//    function __construct(SessionManager $session)
-//    {
-//        $this->session = $session;
-//    }
-
     /**
 	 * Bootstrap the application events.
 	 *
@@ -27,7 +22,9 @@ class CasServiceProvider extends ServiceProvider {
 	 */
 	public function boot()
 	{
-		$this->package('xavrsl/cas');
+	    $this->publishes([
+            __DIR__.'/../../config/cas.php' => config_path('cas.php'),
+	    ]);
 	}
 
 	/**
@@ -39,7 +36,7 @@ class CasServiceProvider extends ServiceProvider {
 	{
 		$this->app['cas'] = $this->app->share(function()
 		{
-		    $config = Config::get('cas::config');
+		    $config = $this->app['config']->get('cas');
             $auth = App::make('auth');
             $session = App::make('session');
 			return new CasManager($config, $auth, $session);

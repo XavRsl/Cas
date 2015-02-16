@@ -13,7 +13,7 @@ class CasManager {
 	 *
 	 * @var array
 	 */
-	protected $connections = array();
+	protected $connection;
     /**
      * @var \Illuminate\Auth\AuthManager
      */
@@ -41,14 +41,14 @@ class CasManager {
 	 * @param  string  $name
 	 * @return Xavrsl\Cas\Directory
 	 */
-	public function connection($name = null)
+	public function connection()
 	{
-		if ( ! isset($this->connections[$name]))
+		if ( empty($this->connection))
 		{
-			$this->connections[$name] = $this->createConnection($name);
+			$this->connection = $this->createConnection();
 		}
 
-		return $this->connections[$name];
+		return $this->connection;
 	}
 
 	/**
@@ -57,46 +57,11 @@ class CasManager {
 	 * @param  string  $name
 	 * @return Xavrsl\Cas\Sso
 	 */
-	protected function createConnection($name)
+	protected function createConnection()
 	{
-		$config = $this->getConfig($name);
-
-		$connection = new Sso($config, $this->auth, $this->session);
+		$connection = new Sso($this->config, $this->auth, $this->session);
 
 		return $connection;
-	}
-
-	/**
-	 * Get the configuration for a connection.
-	 *
-	 * @param  string  $name
-	 * @return array
-	 */
-	protected function getConfig($name)
-	{
-		$name = $name ?: $this->getDefaultConnection();
-
-		// To get the database connection configuration, we will just pull each of the
-		// connection configurations and get the configurations for the given name.
-		// If the configuration doesn't exist, we'll throw an exception and bail.
-		$connections = $this->config;
-
-		if (is_null($config = array_get($connections, $name)))
-		{
-			throw new \InvalidArgumentException("Cas [$name] not configured.");
-		}
-
-		return $config;
-	}
-
-	/**
-	 * Get the default connection name.
-	 *
-	 * @return string
-	 */
-	protected function getDefaultConnection()
-	{
-		return 'default';
 	}
 
 	/**
