@@ -29,7 +29,7 @@ class Sso {
     /**
      * Make PHPCAS Initialization
      *
-     * Initialize a PHPCAS token request
+     * Initialize phpCAS before authentication
      *
      * @return none
      */
@@ -99,9 +99,10 @@ class Sso {
         }
     }
 
-
     /**
+     * Configure Cas Proxy Chain
      *
+     * Cas can proxy services. Here you can specify which ones are allowed.
      */
     private function configureProxyChain()
     {
@@ -172,7 +173,7 @@ class Sso {
      */
     public function logout($params = array())
     {
-        if(phpCAS::isAuthenticated())
+        if(!phpCAS::isAuthenticated())
         {
             $this->initializeCas();
         }
