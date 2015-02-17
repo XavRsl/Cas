@@ -1,6 +1,6 @@
 {
     "name": "xavrsl/cas",
-    "description": "Add CAS server SSO authentication to laravel 4.x",
+    "description": "Add CAS server SSO authentication to Laravel 4 and 5",
 		"keywords": ["CAS", "phpCAS", "SSO", "laravel"],
 		"license": "MIT",
     "authors": [
