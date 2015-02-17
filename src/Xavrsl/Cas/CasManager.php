@@ -14,25 +14,13 @@ class CasManager {
 	 * @var array
 	 */
 	protected $connection;
-    /**
-     * @var \Illuminate\Auth\AuthManager
-     */
-    private $auth;
-    /**
-     * @var \Illuminate\Session\SessionManager
-     */
-    private $session;
 
     /**
      * @param array $config
-     * @param AuthManager $auth
-     * @param SessionManager $session
      */
-    function __construct(Array $config, AuthManager $auth, SessionManager $session)
+    function __construct(Array $config)
     {
         $this->config = $config;
-        $this->auth = $auth;
-        $this->session = $session;
     }
 
     /**
@@ -57,7 +45,7 @@ class CasManager {
 	 */
 	protected function createConnection()
 	{
-		$connection = new Sso($this->config, $this->auth, $this->session);
+		$connection = new Sso($this->config);
 
 		return $connection;
 	}

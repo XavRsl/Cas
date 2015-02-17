@@ -1,7 +1,5 @@
 <?php namespace Xavrsl\Cas;
 
-use Illuminate\Auth\AuthManager;
-use Illuminate\Session\SessionManager;
 use phpCAS;
 
 /**
@@ -17,55 +15,119 @@ class Sso {
      *
      * @var array
      */
-    protected $config;
-
-    /**
-     * Current CAS user
-     *
-     * @var string
-     */
-    protected $remoteUser;
-
-    /**
-     * @var \Illuminate\Auth\AuthManager
-     */
-    private $auth;
-    /**
-     * @var \Illuminate\Session\SessionManager
-     */
-    private $session;
-
-    private $isAuthenticated;
+    private $config;
 
     /**
      * @param $config
-     * @param Auth $auth
-     * @param Session $session
      */
-    public function __construct($config, AuthManager $auth, SessionManager $session)
+    function __construct($config)
     {
         $this->config = $config;
-        $this->auth = $auth;
-        $this->session = $session;
-        $this->cas_init();
+        $this->initializeCas();
+    }
+
+    /**
+     * Make PHPCAS Initialization
+     *
+     * Initialize a PHPCAS token request
+     *
+     * @return none
+     */
+    private function initializeCas()
+    {
+        $this->configureDebug();
+        // initialize CAS client
+        $this->configureCasClient();
+
+        $this->configureSslValidation();
+        phpCAS::handleLogoutRequests();
+
+        $this->configureProxyChain();
+    }
+
+    /**
+     * Configure CAS debug
+     */
+    private function configureDebug()
+    {
+        if($debug = $this->config['cas_debug'])
+        {
+            $path = (gettype($debug) == 'string') ? $debug : false;
+            phpCAS::setDebug($path);
+        }
+    }
+
+    /**
+     * Configure CAS Client
+     *
+     */
+    private function configureCasClient()
+    {
+        $method = !$this->config['cas_proxy'] ? 'client' : 'proxy';
+        // Last argument of method (proxy or client) is $changeSessionID. It is true by default. It means it will
+        // override the framework's session_id. This allows for Single Sign Out. And it means that there is no point
+        // in using the framework's session and authentication objects. If CAS destroys the session, it will destroy it
+        // for everyone and you only need to deal with one session.
+        phpCAS::$method(
+            !$this->config['cas_saml'] ? CAS_VERSION_2_0 : SAML_VERSION_1_1,
+            $this->config['cas_hostname'],
+            $this->config['cas_port'],
+            $this->config['cas_uri']
+        );
+    }
+
+    /**
+     * Configure SSL Validation
+     *
+     * Having some kind of server cert validation in production
+     * is highly recommended.
+     */
+    private function configureSslValidation()
+    {
+        // set SSL validation for the CAS server
+        if ($this->config['cas_validation'] == 'self')
+        {
+            phpCAS::setCasServerCert($this->config['cas_cert']);
+        }
+        else if ($this->config['cas_validation'] == 'ca')
+        {
+            phpCAS::setCasServerCACert($this->config['cas_cert']);
+        }
+        else
+        {
+            phpCAS::setNoCasServerValidation();
+        }
+    }
+
+
+    /**
+     *
+     */
+    private function configureProxyChain()
+    {
+        if (is_array($this->config['cas_proxied_services']) && !empty($this->config['cas_proxied_services']))
+        {
+            phpCAS::allowProxyChain(new \CAS_ProxyChain($this->config['cas_proxied_services']));
+        }
     }
 
     /**
      * Authenticates the user based on the current request.
      *
-     * If authentication is successful, true must be returned.
      * If authentication fails, an exception must be thrown.
      *
-     * @return bool
+     * @throws CasAuthenticationException
      */
     public function authenticate()
     {
-        // attempt to authenticate with CAS server
-        if (phpCAS::forceAuthentication()) {
-            // retrieve authenticated credentials
-            $this->setRemoteUser();
-            return true;
-        } else return false;
+        try
+        {
+            phpCAS::forceAuthentication();
+        }
+        catch(\Exception $e)
+        {
+            throw new CasAuthenticationException;
+        }
     }
 
     /**
@@ -73,8 +135,9 @@ class Sso {
      *
      * @return bool
      */
-    public function isAuthenticated(){
-        return $this->isAuthenticated;
+    public function isAuthenticated()
+    {
+        return phpCAS::isAuthenticated();
     }
 
 
@@ -85,8 +148,9 @@ class Sso {
      *
      * @return array|null
      */
-    public function getCurrentUser() {
-        return $this->remoteUser;
+    public function getCurrentUser()
+    {
+        return phpCAS::getUser();
     }
 
     /**
@@ -94,123 +158,26 @@ class Sso {
      *
      * @return array|null
      */
-    public function user(){
-        return $this->getCurrentUser();
+    public function user()
+    {
+        return phpCAS::getUser();
     }
-
 
     /**
      * This method is used to logout from CAS
      *
-     * @param string $service a URL that will be transmitted to the CAS server to do a redirect after logout
+     * @param array  ['url' => 'http://...'] || ['service' => ...]
      *
      * @return none
      */
-    public function logout($service = "")
+    public function logout($params = array())
     {
-        if(phpCAS::isSessionAuthenticated()) {
-            if ($this->auth->check())
-            {
-                $this->auth->logout();
-            }
-            $this->session->flush();
-			if($service != "")
-			{
-				phpCAS::logoutWithRedirectService($service);
-			}
-			else
-			{
-				phpCAS::logout();
-			}
-            exit;
-        }
-    }
-
-
-    /**
-     * Make PHPCAS Initialization
-     *
-     * Initialize a PHPCAS token request
-     *
-     * @return none
-     */
-    private function cas_init() {
-        // initialize CAS client
-        if($this->config['cas_proxy'])
+        if(phpCAS::isAuthenticated())
         {
-            $this->configureCasProxy();
-            $this->configureSslValidation();
+            $this->initializeCas();
         }
-        else
-        {
-            $this->configureCasClient();
-            $this->configureSslValidation();
-            $this->detect_authentication();
-        }
-
-        // set service URL for authorization with CAS server
-        //\phpCAS::setFixedServiceURL();
-
-        if (!empty($this->config['cas_service'])) {
-            phpCAS::allowProxyChain(new \CAS_ProxyChain_Any);
-        }
-
-        // set login and logout URLs of the CAS server
-        phpCAS::setServerLoginURL($this->config['cas_login_url']);
-        phpCAS::setServerLogoutURL($this->config['cas_logout_url']);
-
-
+        phpCAS::logout($params);
+        exit;
     }
 
-    /**
-     * Configure CAS Proxy
-     */
-    private function configureCasProxy()
-    {
-        phpCAS::proxy(CAS_VERSION_2_0, $this->config['cas_hostname'], $this->config['cas_port'], $this->config['cas_uri'], false);
-
-        // set URL for PGT callback
-        phpCAS::setFixedCallbackURL($this->generate_url(array('action' => 'pgtcallback')));
-
-        // set PGT storage
-        phpCAS::setPGTStorageFile('xml', $this->config['cas_pgt_dir']);
-    }
-
-    /**
-     * Configure CAS Client
-     *
-     */
-    private function configureCasClient()
-    {
-        phpCAS::client(CAS_VERSION_2_0, $this->config['cas_hostname'], $this->config['cas_port'], $this->config['cas_uri'], false);
-    }
-
-    private function configureSslValidation()
-    {
-        // set SSL validation for the CAS server
-        if ($this->config['cas_validation'] == 'self') {
-            phpCAS::setCasServerCert($this->config['cas_cert']);
-        } else if ($this->config['cas_validation'] == 'ca') {
-            phpCAS::setCasServerCACert($this->config['cas_cert']);
-        } else {
-            phpCAS::setNoCasServerValidation();
-        }
-    }
-
-
-    /**
-     * Set Remote User
-     */
-    private function setRemoteUser(){
-        $this->remoteUser = phpCAS::getUser();
-    }
-
-    private function detect_authentication()
-    {
-        $this->isAuthenticated = phpCAS::isAuthenticated();
-
-        if ($this->isAuthenticated) {
-            $this->setRemoteUser();
-        }
-    }
 }

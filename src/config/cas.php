@@ -3,6 +3,19 @@
 return [
         /*
         |--------------------------------------------------------------------------
+        | PHPCas Debug
+        |--------------------------------------------------------------------------
+        |
+        | Example : '/var/log/phpCas.log'
+        | or true for default location (/tmp/phpCAS.log)
+        |
+        */
+
+        'cas_debug' => env('CAS_DEBUG', false),
+
+
+        /*
+        |--------------------------------------------------------------------------
         | PHPCas Hostname
         |--------------------------------------------------------------------------
         |
@@ -11,32 +24,6 @@ return [
         */
 
         'cas_hostname' => env('CAS_HOSTNAME'),
-
-
-        /*
-        |--------------------------------------------------------------------------
-        | Use as Cas proxy ?
-        |--------------------------------------------------------------------------
-        */
-
-        'cas_proxy' => env('CAS_PROXY', false),
-
-
-        /*
-        |--------------------------------------------------------------------------
-        | Enable service to be proxied
-        |--------------------------------------------------------------------------
-        |
-        | Example:
-        | phpCAS::allowProxyChain(new CAS_ProxyChain(array(
-        |                                 '/^https:\/\/app[0-9]\.example\.com\/rest\//',
-        |                                 'http://client.example.com/'
-        |                         )));
-        | For the exemple above:
-        |   'cas_service' => array('/^https:\/\/app[0-9]\.example\.com\/rest\//','http://client.example.com/'),
-        */
-
-        'cas_service' => array(),
 
 
         /*
@@ -90,26 +77,6 @@ return [
 
         /*
         |--------------------------------------------------------------------------
-        | CAS Login URL
-        |--------------------------------------------------------------------------
-        |
-        | Empty is fine
-        |
-        */
-
-        'cas_login_url' => env('CAS_LOGIN_URL', ''),
-
-
-        /*
-        |--------------------------------------------------------------------------
-        | CAS Logout URL
-        |--------------------------------------------------------------------------
-        */
-
-        'cas_logout_url' => env('CAS_LOGOUT_URL', ''),
-
-        /*
-        |--------------------------------------------------------------------------
         | Pretend to be a CAS user
         |--------------------------------------------------------------------------
         |
@@ -118,5 +85,44 @@ return [
         |
         */
 
-        'cas_pretend_user' => env('CAS_PRETEND_USER', '')
+        'cas_pretend_user' => env('CAS_PRETEND_USER', ''),
+
+        /*
+        |--------------------------------------------------------------------------
+        | Use as Cas proxy ?
+        |--------------------------------------------------------------------------
+        */
+
+         'cas_proxy' => env('CAS_PROXY', false),
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Enable service to be proxied
+        |--------------------------------------------------------------------------
+        |
+        | Example:
+        | phpCAS::allowProxyChain(new CAS_ProxyChain(array(
+        |                                 '/^https:\/\/app[0-9]\.example\.com\/rest\//',
+        |                                 'http://client.example.com/'
+        |                         )));
+        | For the exemple above:
+        |   'cas_proxied_services' => array('/^https:\/\/app[0-9]\.example\.com\/rest\//','http://client.example.com/'),
+        */
+
+         'cas_proxied_services' => array(),
+
+        /*
+        |--------------------------------------------------------------------------
+        | Use SAML to retrieve user attributes
+        |--------------------------------------------------------------------------
+        |
+        | Cas can be configured to return more than just the username to a given
+        | service. It could for example use an LDAP backend to return the first name,
+        | last name, and email of the user. This can be activated on the client side
+        | by setting 'cas_saml' to true.
+        |
+        */
+
+        'cas_saml' => env('CAS_SAML', false)
 ];

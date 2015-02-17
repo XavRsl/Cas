@@ -1,22 +1,11 @@
 <?php namespace Xavrsl\Cas;
 
-use App;
-use Config;
-use Illuminate\Session\SessionManager;
 use Illuminate\Support\ServiceProvider;
 
 class CasServiceProvider extends ServiceProvider {
 
-    var $session;
-	/**
-	 * Indicates if loading of the provider is deferred.
-	 *
-	 * @var bool
-	 */
-	protected $defer = false;
-
     /**
-	 * Bootstrap the application events.
+	 * Bootstrap the application.
 	 *
 	 * @return void
 	 */
@@ -37,9 +26,7 @@ class CasServiceProvider extends ServiceProvider {
 		$this->app['cas'] = $this->app->share(function()
 		{
 		    $config = $this->app['config']->get('cas');
-            $auth = App::make('auth');
-            $session = App::make('session');
-			return new CasManager($config, $auth, $session);
+			return new CasManager($config);
 		});
 	}
 
