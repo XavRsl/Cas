@@ -1,4 +1,5 @@
 <?php namespace Xavrsl\Cas;
+
 use Illuminate\Auth\AuthManager;
 use Illuminate\Session\SessionManager;
 use phpCAS;
@@ -163,7 +164,6 @@ class Sso {
 
     /**
      * Configure CAS Proxy
-     * @param $cfg
      */
     private function configureCasProxy()
     {
@@ -179,7 +179,6 @@ class Sso {
     /**
      * Configure CAS Client
      *
-     * @param $cfg
      */
     private function configureCasClient()
     {

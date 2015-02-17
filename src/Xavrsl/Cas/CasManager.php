@@ -38,7 +38,6 @@ class CasManager {
     /**
 	 * Get a Cas connection instance.
 	 *
-	 * @param  string  $name
 	 * @return Xavrsl\Cas\Directory
 	 */
 	public function connection()
@@ -54,7 +53,6 @@ class CasManager {
 	/**
 	 * Create the given connection by name.
 	 *
-	 * @param  string  $name
 	 * @return Xavrsl\Cas\Sso
 	 */
 	protected function createConnection()
