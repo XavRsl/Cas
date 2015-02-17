@@ -52,7 +52,7 @@ class Sso {
     {
         if($debug = $this->config['cas_debug'])
         {
-            $path = (gettype($debug) == 'string') ? $debug : false;
+            $path = (gettype($debug) == 'string') ? $debug : '';
             phpCAS::setDebug($path);
         }
     }
@@ -162,6 +162,16 @@ class Sso {
     public function user()
     {
         return phpCAS::getUser();
+    }
+
+    /**
+     * getAttributes' simple wrapper
+     *
+     * @return array|null
+     */
+    public function getAttributes()
+    {
+        return phpCAS::getAttributes();
     }
 
     /**
