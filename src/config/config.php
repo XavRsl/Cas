@@ -101,5 +101,16 @@ return array(
 		*/
 		
 		'cas_logout_url' => 'https://cas.domain.fr/logout?service=%s',
+		
+		/*
+		|--------------------------------------------------------------------------
+		| CAS Post Authenticate Callback
+		|--------------------------------------------------------------------------
+		|
+		| This function is called after authentication is successful and takes in 
+		| the ticket as an argument.
+		|
+		*/
+		'cas_post_authenticate_callback' => 'fraudPostAuthenticateCallback',
 	)
 );
