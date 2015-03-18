@@ -140,6 +140,16 @@ class Sso {
     {
         return phpCAS::isAuthenticated();
     }
+    
+    /**
+     * Checks to see is user is authenticated using CAS protocol "gateway" feature
+     *
+     * @return bool
+     */
+    public function checkAuthentication()
+    {
+        return phpCAS::checkAuthentication();
+    }
 
 
     /**
