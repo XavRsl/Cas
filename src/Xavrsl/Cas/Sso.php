@@ -132,7 +132,7 @@ class Sso {
     }
 
     /**
-     * Checks to see is user is authenticated
+     * Checks to see if user is authenticated
      *
      * @return bool
      */
@@ -142,7 +142,7 @@ class Sso {
     }
     
     /**
-     * Checks to see is user is authenticated using CAS protocol "gateway" feature
+     * Checks to see if user is authenticated using CAS protocol "gateway" feature
      *
      * @return bool
      */
