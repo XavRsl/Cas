@@ -111,6 +111,6 @@ return array(
 		| the ticket as an argument.
 		|
 		*/
-		'cas_post_authenticate_callback' => 'fraudPostAuthenticateCallback',
+		'cas_post_authenticate_callback' => '',
 	)
 );
