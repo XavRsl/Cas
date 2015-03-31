@@ -113,14 +113,14 @@ class Sso {
                 $this->auth->logout();
             }
             $this->session->flush();
-			if($service != "")
-			{
-				phpCAS::logoutWithRedirectService($service);
-			}
-			else
-			{
-				phpCAS::logout();
-			}
+            if($service != "")
+            {
+                phpCAS::logoutWithRedirectService($service);
+            }
+            else
+            {
+                phpCAS::logout();
+            }
             exit;
         }
     }
@@ -176,7 +176,7 @@ class Sso {
      */
     private function configureCasProxy()
     {
-        phpCAS::proxy(CAS_VERSION_2_0, $this->config['cas_hostname'], $this->config['cas_port'], $this->config['cas_uri'], false);
+        phpCAS::proxy($this->config['cas_version'], $this->config['cas_hostname'], $this->config['cas_port'], $this->config['cas_uri'], false);
 
         // set URL for PGT callback
         phpCAS::setFixedCallbackURL($this->generate_url(array('action' => 'pgtcallback')));
@@ -192,7 +192,7 @@ class Sso {
      */
     private function configureCasClient()
     {
-        phpCAS::client(CAS_VERSION_2_0, $this->config['cas_hostname'], $this->config['cas_port'], $this->config['cas_uri'], false);
+        phpCAS::client($this->config['cas_version'], $this->config['cas_hostname'], $this->config['cas_port'], $this->config['cas_uri'], false);
     }
 
     private function configureSslValidation()
