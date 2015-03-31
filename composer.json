@@ -1,5 +1,5 @@
 {
-    "name": "xavrsl/cas",
+    "name": "rroslaniec/cas",
     "description": "Add CAS server SSO authentication to laravel 4.x",
 		"keywords": ["CAS", "phpCAS", "SSO", "laravel"],
 		"license": "MIT",
