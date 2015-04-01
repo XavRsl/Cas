@@ -71,7 +71,7 @@ return array(
 		*/
 
 		'cas_validation' => '',
-		
+
 		/*
 		|--------------------------------------------------------------------------
 		| CAS Certificate
@@ -80,9 +80,9 @@ return array(
 		| Path to the CAS certificate file
 		|
 		*/
-		
+
 		'cas_cert' => '/path/to/cert/file',
-		
+
 		/*
 		|--------------------------------------------------------------------------
 		| CAS Login URI
@@ -91,26 +91,33 @@ return array(
 		| Empty is fine
 		|
 		*/
-		
+
 		'cas_login_url' => '',
-		
+
 		/*
 		|--------------------------------------------------------------------------
 		| CAS Logout URI
 		|--------------------------------------------------------------------------
 		*/
-		
+
 		'cas_logout_url' => 'https://cas.domain.fr/logout?service=%s',
-		
+
 		/*
 		|--------------------------------------------------------------------------
 		| CAS Post Authenticate Callback
 		|--------------------------------------------------------------------------
 		|
-		| This function is called after authentication is successful and takes in 
+		| This function is called after authentication is successful and takes in
 		| the ticket as an argument.
 		|
 		*/
 		'cas_post_authenticate_callback' => '',
+
+		/*
+		|--------------------------------------------------------------------------
+		| CAS Version
+		|--------------------------------------------------------------------------
+		*/
+		'cas_version' => '2.0',
 	)
 );
