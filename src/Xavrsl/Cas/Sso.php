@@ -147,7 +147,8 @@ class Sso {
         $this->configureSslValidation();
 
         //set the postAuthenticateCallback function if it exists
-        if($this->config['cas_post_authenticate_callback'])
+        if(isset($this->config['cas_post_authenticate_callback']) 
+            && $this->config['cas_post_authenticate_callback'])
         {
             phpCAS::setPostAuthenticateCallback($this->config['cas_post_authenticate_callback']);
         }
