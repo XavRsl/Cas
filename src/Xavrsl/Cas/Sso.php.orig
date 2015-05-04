@@ -143,11 +143,32 @@ class Sso {
 
         try
         {
+<<<<<<< HEAD
+            $this->configureCasProxy();
+=======
             phpCAS::forceAuthentication();
+>>>>>>> develop
         }
         catch(\Exception $e)
         {
+<<<<<<< HEAD
+            $this->configureCasClient();
+        }
+
+        $this->configureSslValidation();
+
+        //set the postAuthenticateCallback function if it exists
+        if(isset($this->config['cas_post_authenticate_callback']) 
+            && $this->config['cas_post_authenticate_callback'])
+        {
+            phpCAS::setPostAuthenticateCallback($this->config['cas_post_authenticate_callback']);
+        }
+
+        if(!$this->config['cas_proxy']) {
+            $this->detect_authentication();
+=======
             throw new CasAuthenticationException;
+>>>>>>> develop
         }
     }
 
