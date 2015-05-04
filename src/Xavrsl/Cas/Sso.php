@@ -106,10 +106,28 @@ class Sso {
      */
     private function configureProxyChain()
     {
-        if (is_array($this->config['cas_proxied_services']) && !empty($this->config['cas_proxied_services']))
+        if (is_array($this->config['cas_proxied_services'])
+            && !empty($this->config['cas_proxied_services']))
         {
             phpCAS::allowProxyChain(new \CAS_ProxyChain($this->config['cas_proxied_services']));
         }
+    }
+
+    /**
+     * isPretending
+     *
+     * When on dev environment, you can sometimes be on a private network that can't access to the CAS
+     * server. Sometimes, you may also want to check the application as if you where one user or
+     * another. This is why you may specify a CAS_PRETEND_USER config variable.
+     */
+    private function isPretending()
+    {
+        if (isset($this->config['cas_pretend_user'])
+            && !empty($this->config['cas_pretend_user']))
+        {
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -121,6 +139,8 @@ class Sso {
      */
     public function authenticate()
     {
+        if($this->isPretending()) return true;
+
         try
         {
             phpCAS::forceAuthentication();
@@ -138,6 +158,8 @@ class Sso {
      */
     public function isAuthenticated()
     {
+        if($this->isPretending()) return true;
+
         return phpCAS::isAuthenticated();
     }
 
@@ -151,6 +173,8 @@ class Sso {
      */
     public function getCurrentUser()
     {
+        if($this->isPretending()) return $this->config['cas_pretend_user'];
+
         return phpCAS::getUser();
     }
 
@@ -161,6 +185,8 @@ class Sso {
      */
     public function user()
     {
+        if($this->isPretending()) return $this->config['cas_pretend_user'];
+
         return phpCAS::getUser();
     }
 
@@ -183,6 +209,8 @@ class Sso {
      */
     public function logout($params = array())
     {
+        if($this->isPretending()) return true;
+
         if(!phpCAS::isAuthenticated())
         {
             $this->initializeCas();
