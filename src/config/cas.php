@@ -82,7 +82,6 @@ return [
         |
         | This is useful in development mode. CAS is not called at all, only user
         | is set.
-        | (NOT YET IMPLEMENTED !!)
         |
         */
 
