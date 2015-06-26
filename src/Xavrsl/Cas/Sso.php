@@ -152,7 +152,7 @@ class Sso {
     }
 
     /**
-     * Checks to see is user is authenticated
+     * Checks to see if user is authenticated
      *
      * @return bool
      */
@@ -161,6 +161,16 @@ class Sso {
         if($this->isPretending()) return true;
 
         return phpCAS::isAuthenticated();
+    }
+    
+    /**
+     * Checks to see if user is authenticated using CAS protocol "gateway" feature
+     *
+     * @return bool
+     */
+    public function checkAuthentication()
+    {
+        return phpCAS::checkAuthentication();
     }
 
 
