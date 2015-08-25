@@ -19,7 +19,7 @@ return [
         | PHPCas Hostname
         |--------------------------------------------------------------------------
         |
-        | Exemple: 'cas.myuniv.edu'.
+        | Example: 'cas.myuniv.edu'.
         |
         */
 
