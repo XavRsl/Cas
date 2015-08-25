@@ -85,11 +85,7 @@ class Sso {
     private function configureSslValidation()
     {
         // set SSL validation for the CAS server
-        if ($this->config['cas_validation'] == 'self')
-        {
-            phpCAS::setCasServerCert($this->config['cas_cert']);
-        }
-        else if ($this->config['cas_validation'] == 'ca')
+        if ($this->config['cas_validation'] == 'ca' || $this->config['cas_validation'] == 'self')
         {
             phpCAS::setCasServerCACert($this->config['cas_cert']);
         }
