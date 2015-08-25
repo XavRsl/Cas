@@ -55,8 +55,8 @@ return [
         | CAS Validation
         |--------------------------------------------------------------------------
         |
-        | CAS server SSL validation: 'self' for self-signed certificate, 'ca' for
-        | certificate from a CA, empty for no SSL validation.
+        | CAS server SSL validation: 'ca' for certificate from a CA or self-signed
+        | certificate, empty for no SSL validation.
         |
         */
 
