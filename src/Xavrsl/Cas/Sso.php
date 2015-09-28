@@ -148,6 +148,27 @@ class Sso {
     }
 
     /**
+     * Authenticates the user based on the current request without redirect to login page.
+     *
+     * If authentication fails, an exception must be thrown.
+     *
+     * @throws CasAuthenticationException
+     */
+    public function checkAuthenticate()
+    {
+        if($this->isPretending()) return true;
+
+        try
+        {
+            phpCAS::checkAuthentication();
+        }
+        catch(\Exception $e)
+        {
+            throw new CasAuthenticationException;
+        }
+    }
+
+    /**
      * Checks to see is user is authenticated
      *
      * @return bool
