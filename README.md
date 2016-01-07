@@ -15,7 +15,12 @@ For Laravel 5 use v1.2.* :
 
     "xavrsl/cas": "1.2.*"
 
-After updating composer, add the ServiceProvider to the providers array in app/config/app.php
+After updating composer, add the ServiceProvider to the providers array:
+
+For Laravel 4:
+
+app/config/app.php
+
 ```php
     'Xavrsl\Cas\CasServiceProvider',
 ```
@@ -23,6 +28,19 @@ As well as the Facade :
 ```php
 	'Cas' => 'Xavrsl\Cas\Facades\Cas',
 ```
+
+For Laravel 5:
+
+config/app.php
+
+```php
+    Xavrsl\Cas\CasServiceProvider::class,
+```
+As well as the Facade :
+```php
+	'Cas'       => Xavrsl\Cas\Facades\Cas::class,
+```
+
 Then publish the package's config using one of those methods :
 
 For Laravel 4 :
