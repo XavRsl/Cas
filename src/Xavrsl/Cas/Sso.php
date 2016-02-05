@@ -228,10 +228,6 @@ class Sso {
     {
         if($this->isPretending()) return true;
 
-        if(!phpCAS::isAuthenticated())
-        {
-            $this->initializeCas();
-        }
         phpCAS::logout($params);
         exit;
     }
