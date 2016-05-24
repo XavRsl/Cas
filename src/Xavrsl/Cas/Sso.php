@@ -54,6 +54,8 @@ class Sso {
         {
             $path = (gettype($debug) == 'string') ? $debug : '';
             phpCAS::setDebug($path);
+            // https://github.com/Jasig/phpCAS/commit/bb382f5038f6241c7c577fb55430ad505f1f6e23
+            phpCAS::setVerbose(true);
         }
     }
 
