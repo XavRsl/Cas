@@ -73,7 +73,7 @@ class Sso {
         phpCAS::$method(
             !$this->config['cas_saml'] ? CAS_VERSION_2_0 : SAML_VERSION_1_1,
             $this->config['cas_hostname'],
-            $this->config['cas_port'],
+            (integer) $this->config['cas_port'],
             $this->config['cas_uri']
         );
     }
