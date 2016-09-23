@@ -23,7 +23,9 @@ class Sso {
     function __construct($config)
     {
         $this->config = $config;
-        $this->initializeCas();
+        if(!$this->isPretending()) {
+            $this->initializeCas();
+        }
     }
 
     /**
