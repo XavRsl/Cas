@@ -42,6 +42,7 @@ class Sso {
         $this->configureCasClient();
 
         $this->configureSslValidation();
+        $this->configureServerValidateURL();
         phpCAS::handleLogoutRequests();
 
         $this->configureProxyChain();
@@ -96,6 +97,27 @@ class Sso {
         else
         {
             phpCAS::setNoCasServerValidation();
+        }
+    }
+
+    /**
+     * Configure Server Validate URL
+     *
+     * Override the validation URL is sometimes wanted.
+     */
+    private function configureServerValidateURL()
+    {
+        // override validation URL for the CAS server
+        if ($this->config['cas_validation_url'])
+        {
+            if ($this->config['cas_saml'])
+            {
+                phpCAS::setServerSamlValidateURL($this->config['cas_validation_url']);
+            }
+            else
+            {
+                phpCAS::setServerServiceValidateURL($this->config['cas_validation_url']);
+            }
         }
     }
 
@@ -218,6 +240,8 @@ class Sso {
      */
     public function getAttributes()
     {
+        if($this->isPretending()) return $this->config['cas_pretend_user_attributes'];
+
         return phpCAS::getAttributes();
     }
 
