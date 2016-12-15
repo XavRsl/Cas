@@ -42,6 +42,7 @@ class Sso {
         $this->configureCasClient();
 
         $this->configureSslValidation();
+        $this->configureServerValidateURL();
         phpCAS::handleLogoutRequests();
 
         $this->configureProxyChain();
@@ -96,6 +97,35 @@ class Sso {
         else
         {
             phpCAS::setNoCasServerValidation();
+        }
+    }
+
+    /**
+     * Configure a non-standard url for ticket validation
+     * 
+     */
+    private function configureServerValidateURL()
+    {
+        // set a non-standard url for ticket validation
+        if ($this->config['cas_validation_url'])
+        {
+            if ($this->config['cas_proxy']) {
+                // Set the proxyValidate URL of the CAS server. /proxyValidate [CAS 2.0]
+                // https://apereo.github.io/cas/5.0.x/protocol/CAS-Protocol-Specification.html#proxyvalidate-cas-20
+                phpCAS::setServerProxyValidateURL($this->config['cas_validation_url']);
+            }
+            else if ($this->config['cas_saml'])
+            {
+                // Set the samlValidate URL of the CAS server. /samlValidate [CAS 3.0]
+                // https://apereo.github.io/cas/5.0.x/protocol/CAS-Protocol-Specification.html#samlvalidate-cas-30
+                phpCAS::setServerSamlValidateURL($this->config['cas_validation_url']);
+            }
+            else
+            {
+                // Set the serviceValidate URL of the CAS server. /serviceValidate [CAS 2.0]
+                // https://apereo.github.io/cas/5.0.x/protocol/CAS-Protocol-Specification.html#servicevalidate-cas-20
+                phpCAS::setServerServiceValidateURL($this->config['cas_validation_url']);
+            }
         }
     }
 
@@ -218,6 +248,8 @@ class Sso {
      */
     public function getAttributes()
     {
+        if($this->isPretending()) return $this->config['cas_pretend_user_attributes'];
+
         return phpCAS::getAttributes();
     }
 

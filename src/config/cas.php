@@ -65,6 +65,23 @@ return [
 
         /*
         |--------------------------------------------------------------------------
+        | Custom CAS url for ticker validation
+        |--------------------------------------------------------------------------
+        |
+        | Configure a non-standard url for ticket validation.
+        | This feature is supported in phpCAS since version 1.1.0RC2.
+        | The validation urls can be set for service, proxy and saml validation.
+        |
+        | Example:
+        | https://github.com/Jasig/phpCAS/blob/master/docs/examples/example_custom_urls.php
+        |
+        */
+
+        'cas_validation_url' => env('CAS_VALIDATION_URL', false),
+
+
+        /*
+        |--------------------------------------------------------------------------
         | CAS Certificate
         |--------------------------------------------------------------------------
         |
@@ -86,6 +103,24 @@ return [
         */
 
         'cas_pretend_user' => env('CAS_PRETEND_USER', ''),
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Pretend CAS user attributes
+        |--------------------------------------------------------------------------
+        |
+        | This is useful in development mode when using 'cas_pretend_user'
+        | configuration we need to defined some defaults attributes for the
+        | user. This attributes are returned if ::getAttributes() is called.
+        |
+        | Exemple:
+        | When a user is logged in his attributes we can find
+        | out his role in the system:
+        |   'cas_pretend_user_attributes' => array('role' => 'ADMIN'),
+        */
+
+        'cas_pretend_user_attributes' => array(),
 
         /*
         |--------------------------------------------------------------------------
