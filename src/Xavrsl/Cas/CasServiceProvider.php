@@ -23,7 +23,7 @@ class CasServiceProvider extends ServiceProvider {
 	 */
 	public function register()
 	{
-		$this->app['cas'] = $this->app->share(function()
+		$this->app->singleton('cas', function()
 		{
 		    $config = $this->app['config']->get('cas');
 			return new CasManager($config);
