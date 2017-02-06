@@ -65,6 +65,20 @@ return [
 
         /*
         |--------------------------------------------------------------------------
+        | Custom CAS Validation URL
+        |--------------------------------------------------------------------------
+        |
+        | Custom CAS server URL validation: In general the validation URL is in the same
+        | server and we don't need to provide this URL, but in some cases we can
+        | or need to provide a custom URL validation.
+        |
+        */
+
+        'cas_validation_url' => env('CAS_VALIDATION_URL', false),
+
+
+        /*
+        |--------------------------------------------------------------------------
         | CAS Certificate
         |--------------------------------------------------------------------------
         |
@@ -86,6 +100,21 @@ return [
         */
 
         'cas_pretend_user' => env('CAS_PRETEND_USER', ''),
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Pretend CAS user attributes
+        |--------------------------------------------------------------------------
+        |
+        | This is useful in development mode. CAS is not called at all, only user
+        | is set and the attributes are returned if ::getAttributes() is called.
+        |
+        | For the exemple:
+        |   'cas_pretend_user_attributes' => array('role' => 'ADMIN'),
+        */
+
+        'cas_pretend_user_attributes' => array(),
 
         /*
         |--------------------------------------------------------------------------
