@@ -235,5 +235,15 @@ class Sso {
         phpCAS::logout($params);
         exit;
     }
-
+    /**
+     * This method is used to call native phpCASMethods
+     *
+     * @param array['methode'=>'logout','params'=>['param1','param2']] 
+     *
+     * @return MethodeResult
+     */
+    public function callNative($params = array())
+    {        
+        return call_user_func_array(array("phpCAS",$params["methode"]),$params["params"]);
+    }
 }
