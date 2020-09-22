@@ -7,13 +7,21 @@ CAS server SSO authentication in Laravel 5.x & 6.x
 
 Require this package in your composer.json and run composer update.
 
-For Laravel 5 & 6 use v1.2.* :
-
-    "xavrsl/cas": "1.2.*"
+```
+{
+    "require": {
+        "xavrsl/cas": "dev-master",
+    },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/leap-solutions-asia/Cas.git"
+        }
+    ],
+}
+```
 
 After updating composer, add the ServiceProvider to the providers array:
-
-For Laravel 5 & 6:
 
 config/app.php
 
@@ -27,7 +35,6 @@ As well as the Facade :
 
 Then publish the package's config using one of those methods :
 
-For Laravel 5 & 6 :
 ```
     $ php artisan vendor:publish
 ```
