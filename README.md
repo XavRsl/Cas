@@ -1,7 +1,7 @@
 CAS
 ===
 
-CAS server SSO authentication in Laravel 5.x, 6.x & 7.x
+CAS server SSO authentication in Laravel 5.x, 6.x, 7.x and 8.x
 
 ## Installation
 
